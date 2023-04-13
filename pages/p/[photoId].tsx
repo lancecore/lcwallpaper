@@ -12,7 +12,7 @@ const Home: NextPage = ({ currentPhoto }: { currentPhoto: ImageProps }) => {
   const { photoId } = router.query
   let index = Number(photoId)
 
-  const currentPhotoUrl = `https://res.cloudinary.com/dnk1sdnt5/image/upload/c_scale,w_2560/${currentPhoto.public_id}.${currentPhoto.format}`
+  const currentPhotoUrl = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_2560/${currentPhoto.public_id}.${currentPhoto.format}`
 
   return (
     <>
@@ -72,6 +72,6 @@ export async function getStaticPaths() {
 
   return {
     paths: fullPaths,
-    fallback: false,
+    fallback: true,
   }
 }
