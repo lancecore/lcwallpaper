@@ -10,6 +10,7 @@ import cloudinary from "../utils/cloudinary";
 import getBase64ImageUrl from "../utils/generateBlurPlaceholder";
 import type { ImageProps } from "../utils/types";
 import { useLastViewedPhoto } from "../utils/useLastViewedPhoto";
+import { useGlitch } from 'react-powerglitch'
 
 const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
   const router = useRouter();
@@ -58,7 +59,7 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
             >
               <Image
                 alt="Weird Wallpaper"
-                className="aspect-[9:19.5]transform rounded-lg transition will-change-auto group-hover:brightness-110"
+                className="aspect-[9/19.5] transform rounded-lg transition will-change-auto group-hover:brightness-110"
                 style={{ transform: "translate3d(0, 0, 0)" }}
                 placeholder="blur"
                 blurDataURL={blurDataUrl}

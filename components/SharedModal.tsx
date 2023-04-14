@@ -55,7 +55,7 @@ export default function SharedModal({
       }}
     >
       <div
-        className="relative z-50 flex aspect-[3/2] h-screen items-center wide:h-full xl:taller-than-854:h-auto"
+        className="relative z-50 flex aspect-[3/2] h-screen items-center"
         {...handlers}
       >
         {/* Main image */}
@@ -90,10 +90,10 @@ export default function SharedModal({
         </div>
 
         {/* Buttons + bottom nav bar */}
-        <div className="absolute inset-0 mx-auto flex max-w-7xl items-center justify-center">
+        <div className="absolute inset-0 mx-auto flex w-screen h-screen items-center justify-center">
           {/* Buttons */}
           {loaded && (
-            <div className="relative aspect-[3/2] max-h-full w-full">
+            <div className="relative w-screen h-screen">
               {navigation && (
                 <>
                   {index > 0 && (
@@ -129,13 +129,13 @@ export default function SharedModal({
                   </a>
                 ) : (
                   <a
-                    href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20pic%20from%20Next.js%20Conf!%0A%0Ahttps://nextjsconf-pics.vercel.app/p/${index}`}
+                    href={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${currentImage.public_id}.${currentImage.format}`}
                     className="rounded-full bg-black/50 p-2 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white"
                     target="_blank"
                     title="Open fullsize version"
                     rel="noreferrer"
                   >
-                    <Twitter className="h-5 w-5" />
+                    <ArrowTopRightOnSquareIcon className="h-5 w-5" />
                   </a>
                 )}
                 <button
