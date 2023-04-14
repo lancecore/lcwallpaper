@@ -75,6 +75,33 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
         },
         "pulse": false
       });
+      
+      const nameGlitch = useGlitch({
+          "playMode": "hover",
+          "createContainers": true,
+          "hideOverflow": false,
+          "timing": {
+            "duration": 250,
+            "iterations": 1
+          },
+          "glitchTimeSpan": {
+            "start": 0,
+            "end": 1
+          },
+          "shake": {
+            "velocity": 15,
+            "amplitudeX": 0.2,
+            "amplitudeY": 0.2
+          },
+          "slice": {
+            "count": 6,
+            "velocity": 15,
+            "minHeight": 0.02,
+            "maxHeight": 0.15,
+            "hueRotate": true
+          },
+          "pulse": false
+        });
 
   return (
     <>
@@ -96,6 +123,7 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
             <h1 className="mb-4 mt-8 text-lg font-bold uppercase tracking-widest">
               Weird Wallpapers<br />for your Phone
             </h1>
+            <p className="text-sm text-stone-400">Created by <a href="https://lanceboer.com/" target="_blank" ref={nameGlitch.ref} className="text-stone-300 hover:text-stone-50 underline decoration-stone-400 underline-offset-4 decoration-solid hover:decoration-wavy">Lance Boer</a></p>
           </div>
           {images.map(({ id, public_id, format, blurDataUrl }) => (
             <span ref={hoverGlitch.ref}>
