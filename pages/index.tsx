@@ -26,6 +26,55 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
       setLastViewedPhoto(null);
     }
   }, [photoId, lastViewedPhoto, setLastViewedPhoto]);
+  
+  const logoGlitch = useGlitch({
+      "playMode": "always",
+      "createContainers": true,
+      "hideOverflow": true,
+      "timing": {
+        "duration": 2500
+      },
+      "glitchTimeSpan": {
+        "start": 0.1,
+        "end": 0.25
+      },
+      "shake": {
+        "velocity": 25,
+        "amplitudeX": 0.1,
+        "amplitudeY": 0.15
+      },
+      "slice": {
+        "count": 8,
+        "velocity": 8,
+        "minHeight": 0.02,
+        "maxHeight": 0.2,
+        "hueRotate": true
+      },
+      "pulse": false
+    });
+    
+    const hoverGlitch = useGlitch({
+        "playMode": "hover",
+        "createContainers": true,
+        "hideOverflow": true,
+        "timing": {
+          "duration": 250,
+          "iterations": 1
+        },
+        "glitchTimeSpan": {
+          "start": 0,
+          "end": 1
+        },
+        "shake": false,
+        "slice": {
+          "count": 6,
+          "velocity": 15,
+          "minHeight": 0.02,
+          "maxHeight": 0.15,
+          "hueRotate": true
+        },
+        "pulse": false
+      });
 
   return (
     <>
@@ -43,12 +92,13 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
         )}
         <div className="columns-1 gap-4 md:columns-4">
           <div className="after:content relative mb-5 flex h-auto flex-col justify-center items-center gap-4 overflow-hidden rounded-lg bg-white/10 px-6 py-12 text-center text-white shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight">
-            <Logo className="h-24 w-auto" />
+            <span ref={logoGlitch.ref}><Logo className="h-24 w-auto" /></span>
             <h1 className="mb-4 mt-8 text-lg font-bold uppercase tracking-widest">
               Weird Wallpapers<br />for your Phone
             </h1>
           </div>
           {images.map(({ id, public_id, format, blurDataUrl }) => (
+            <span ref={hoverGlitch.ref}>
             <Link
               key={id}
               href={`/?photoId=${id}`}
@@ -72,6 +122,7 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
                   25vw"
               />
             </Link>
+            </span>
           ))}
           <p>Test</p>
           <p>Test 2</p>
