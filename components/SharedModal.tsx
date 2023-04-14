@@ -55,12 +55,12 @@ export default function SharedModal({
       }}
     >
       <div
-        className="relative z-50 flex aspect-[3/2] h-screen items-center"
+        className="relative z-50 flex w-full md:w-screen h-screen items-center"
         {...handlers}
       >
         {/* Main image */}
-        <div className="w-full overflow-hidden">
-          <div className="relative flex aspect-[3/2] items-center justify-center">
+        <div className="w-full h-full overflow-hidden">
+          <div className="relative flex justify-center">
             <AnimatePresence initial={false} custom={direction}>
               <motion.div
                 key={index}
@@ -90,10 +90,10 @@ export default function SharedModal({
         </div>
 
         {/* Buttons + bottom nav bar */}
-        <div className="absolute inset-0 mx-auto flex w-screen h-screen items-center justify-center">
+        <div className="absolute inset-0 mx-auto flex max-w-7xl items-center justify-center">
           {/* Buttons */}
           {loaded && (
-            <div className="relative w-screen h-screen">
+            <div className="relative h-screen top-10 md:top-0 w-full">
               {navigation && (
                 <>
                   {index > 0 && (
