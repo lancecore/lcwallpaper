@@ -124,9 +124,10 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
               Weird Wallpapers<br />for your Phone
             </h1>
             <p className="text-sm text-stone-400">Created by <a href="https://lanceboer.com/" target="_blank" ref={nameGlitch.ref} className="text-stone-300 hover:text-stone-50 underline decoration-stone-400 underline-offset-4 decoration-solid hover:decoration-wavy">Lance Boer</a></p>
+            <p className="text-sm text-stone-400">Previously on... <a href="https://bastards.tumblr.com/" target="_blank" ref={nameGlitch.ref} className="text-stone-300 hover:text-stone-50 underline decoration-stone-400 underline-offset-4 decoration-solid hover:decoration-wavy">Stand Up For Bastards</a></p>
           </div>
           {images.map(({ id, public_id, format, blurDataUrl }) => (
-            <span ref={hoverGlitch.ref}>
+            <span ref={hoverGlitch.ref} key={id}>
             <Link
               key={id}
               href={`/?photoId=${id}`}
