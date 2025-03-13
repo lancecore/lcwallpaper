@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	reactStrictMode: true,
-	distDir: "build",
+	distDir: ".next",
 	// output: "export",
 	// trailingSlash: true,
 	// basePath: "/wallpaper/build",
