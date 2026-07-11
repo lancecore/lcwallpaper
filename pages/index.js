@@ -1,34 +1,58 @@
-import Head from "next/head";
 import Link from "next/link";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import GlitchImage from "@/components/GlitchImage";
+import Seo from "@/components/Seo";
+import JsonLd from "@/components/JsonLd";
 import { getImages } from "@/lib/cloudinary";
 import { cldUrl, encodePublicId, humanizePublicId } from "@/lib/cldUrl";
+import { SITE_URL } from "@/lib/siteUrl";
+
+const DESCRIPTION =
+	"Free, weird, glitchy wallpapers for your phone. Download high-resolution iPhone and Android backgrounds — a rogue broadcast from Lancecore.";
 
 export default function Home({ images = [] }) {
 	const featured = images[0];
+	const ogImage = featured
+		? cldUrl(featured.public_id, featured.format, "c_scale,w_1200")
+		: undefined;
+	const ogHeight = featured
+		? Math.round(1200 * (featured.height / featured.width))
+		: undefined;
+
+	const collection = {
+		"@context": "https://schema.org",
+		"@type": "CollectionPage",
+		name: "Weird Phone Wallpapers",
+		description: DESCRIPTION,
+		url: `${SITE_URL}/`,
+		isPartOf: { "@type": "WebSite", name: "Lancecore", url: SITE_URL },
+		mainEntity: {
+			"@type": "ItemList",
+			numberOfItems: images.length,
+			// ponytail: cap the inline list at 24 so a 400-image gallery doesn't
+			// bloat the HTML; the sitemap carries the full set for crawlers.
+			itemListElement: images.slice(0, 24).map((img, i) => ({
+				"@type": "ListItem",
+				position: i + 1,
+				url: `${SITE_URL}/w/${encodePublicId(img.public_id)}`,
+				name: humanizePublicId(img.public_id),
+			})),
+		},
+	};
 
 	return (
 		<>
-			<Head>
-				<title>⚡️ Lancecore — Weird Wallpapers for your Phone</title>
-				<meta
-					property="og:title"
-					content="Weird Wallpapers for your Phone"
-				/>
-				{featured && (
-					<meta
-						property="og:image"
-						content={cldUrl(
-							featured.public_id,
-							featured.format,
-							"c_scale,w_1200"
-						)}
-					/>
-				)}
-				<meta name="twitter:card" content="summary_large_image" />
-			</Head>
+			<Seo
+				title="Weird Phone Wallpapers — Free Downloads | Lancecore"
+				description={DESCRIPTION}
+				path="/"
+				image={ogImage}
+				imageAlt={featured?.alt}
+				imageWidth={ogImage ? 1200 : undefined}
+				imageHeight={ogHeight}
+			/>
+			<JsonLd data={collection} />
 
 			<Hero count={images.length} />
 

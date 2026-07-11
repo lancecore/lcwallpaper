@@ -1,25 +1,67 @@
-import Head from "next/head";
 import Link from "next/link";
 import GlitchImage from "@/components/GlitchImage";
+import Seo from "@/components/Seo";
+import JsonLd from "@/components/JsonLd";
 import { getImages, getImage } from "@/lib/cloudinary";
-import { cldUrl, humanizePublicId } from "@/lib/cldUrl";
+import { cldUrl, encodePublicId, humanizePublicId } from "@/lib/cldUrl";
+import { SITE_URL } from "@/lib/siteUrl";
 
 export default function Wallpaper({ image }) {
 	const name = humanizePublicId(image.public_id);
-	const title = `${name} — Weird Wallpapers`;
+	const title = `${name} — Weird Phone Wallpaper | Lancecore`;
+	const path = `/w/${encodePublicId(image.public_id)}`;
+	const orientation = image.width > image.height ? "Landscape" : "Portrait";
+	const description = `${name} — a free weird phone wallpaper. ${image.width}×${image.height} ${image.format?.toUpperCase()}, ${orientation.toLowerCase()}. Download high-res for iPhone & Android.`;
 	const og = cldUrl(image.public_id, image.format, "c_scale,w_1200");
+	const ogHeight = Math.round(1200 * (image.height / image.width));
 	const download = cldUrl(image.public_id, image.format, "fl_attachment");
 	const filename = `${name.replace(/\s+/g, "-")}.${image.format}`;
-	const orientation = image.width > image.height ? "Landscape" : "Portrait";
+
+	const imageObject = {
+		"@context": "https://schema.org",
+		"@type": "ImageObject",
+		name,
+		description,
+		contentUrl: cldUrl(image.public_id, image.format),
+		thumbnailUrl: cldUrl(image.public_id, image.format, "c_scale,w_720"),
+		width: image.width,
+		height: image.height,
+		encodingFormat: `image/${image.format}`,
+		representativeOfPage: true,
+		creator: {
+			"@type": "Person",
+			name: "Lance Boer",
+			url: "https://lanceboer.com/",
+		},
+		mainEntityOfPage: `${SITE_URL}${path}`,
+	};
+	const breadcrumb = {
+		"@context": "https://schema.org",
+		"@type": "BreadcrumbList",
+		itemListElement: [
+			{
+				"@type": "ListItem",
+				position: 1,
+				name: "Wallpapers",
+				item: `${SITE_URL}/`,
+			},
+			{ "@type": "ListItem", position: 2, name, item: `${SITE_URL}${path}` },
+		],
+	};
 
 	return (
 		<>
-			<Head>
-				<title>{title}</title>
-				<meta property="og:title" content={title} />
-				<meta property="og:image" content={og} />
-				<meta name="twitter:card" content="summary_large_image" />
-			</Head>
+			<Seo
+				title={title}
+				description={description}
+				path={path}
+				image={og}
+				imageAlt={image.alt}
+				imageWidth={1200}
+				imageHeight={ogHeight}
+			/>
+			<JsonLd data={imageObject} />
+			<JsonLd data={breadcrumb} />
 
 			<main id="main" className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-8">
 				<Link

@@ -16,15 +16,6 @@ export default function Document() {
 					href="/favicon-dark.png"
 					media="(prefers-color-scheme: dark)"
 				/>
-				<meta
-					name="description"
-					content="Weird wallpapers for your phone"
-				/>
-				<meta
-					property="og:description"
-					content="Download some weird wallpapers for your phone"
-				/>
-				<meta property="og:type" content="website" />
 				<meta property="og:site_name" content="Lancecore" />
 			</Head>
 			<body className="antialiased">
