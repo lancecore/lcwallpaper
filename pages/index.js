@@ -66,7 +66,7 @@ export default function Home({ images = [] }) {
 							Latest signals
 							<span className="h-px flex-1 bg-zinc-800" />
 						</div>
-						<div className="columns-2 gap-3 sm:gap-4 md:columns-3 xl:columns-4">
+						<div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
 							{images.map((image, i) => (
 								<GalleryTile
 									key={image.id}
@@ -86,27 +86,25 @@ export default function Home({ images = [] }) {
 }
 
 function GalleryTile({ image, index, priority }) {
-	const ratio =
-		image.width && image.height ? image.height / image.width : 1.5;
-
 	return (
 		<Link
 			href={`/w/${encodePublicId(image.public_id)}`}
 			aria-label={`View wallpaper: ${image.title}`}
-			className="group reveal mb-3 block outline-none sm:mb-4"
+			className="group reveal block outline-none"
 			style={{ animationDelay: `${Math.min(index, 10) * 55}ms` }}
 		>
+			{/* Uniform 9:16 crop so every grid tile is the same size and rows stay even. */}
 			<div className="relative overflow-hidden border border-zinc-800/80 bg-zinc-950 transition-colors duration-200 group-hover:border-accent group-focus-visible:border-accent">
 				<GlitchImage
-					src={cldUrl(image.public_id, image.format, "c_scale,w_720")}
+					src={cldUrl(image.public_id, image.format, "c_fill,w_720,h_1280")}
 					blurDataURL={cldUrl(
 						image.public_id,
 						image.format,
-						"e_blur:2000,q_1"
+						"c_fill,w_720,h_1280,e_blur:2000,q_1"
 					)}
 					alt={image.alt}
 					width={720}
-					height={Math.round(720 * ratio)}
+					height={1280}
 					className="w-full"
 					priority={priority}
 				/>
