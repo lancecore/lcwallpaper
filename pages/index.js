@@ -110,9 +110,6 @@ function GalleryTile({ image, index, priority }) {
 					className="w-full"
 					priority={priority}
 				/>
-				<span className="pointer-events-none absolute left-2 top-2 -rotate-3 border border-accent/50 bg-black/80 px-2 py-0.5 font-display text-xs tracking-wider text-bone">
-					{String(index + 1).padStart(2, "0")}
-				</span>
 				<span className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-between gap-2 bg-black/85 px-2.5 py-2 text-[10px] uppercase tracking-[0.25em] text-bone transition-transform duration-200 group-hover:translate-y-0 group-focus-visible:translate-y-0">
 				<span className="truncate">
 						{humanizePublicId(image.public_id)}
