@@ -3,11 +3,11 @@ import GlitchImage from "@/components/GlitchImage";
 import Seo from "@/components/Seo";
 import JsonLd from "@/components/JsonLd";
 import { getImages, getImage } from "@/lib/cloudinary";
-import { cldUrl, encodePublicId, humanizePublicId } from "@/lib/cldUrl";
+import { cldUrl, encodePublicId } from "@/lib/cldUrl";
 import { SITE_URL } from "@/lib/siteUrl";
 
 export default function Wallpaper({ image }) {
-	const name = humanizePublicId(image.public_id);
+	const name = image.title;
 	const title = `${name} — Weird Phone Wallpaper | Lancecore`;
 	const path = `/w/${encodePublicId(image.public_id)}`;
 	const description = `${name} — a free weird phone wallpaper. ${image.width}×${image.height} ${image.format?.toUpperCase()}. Download high-res for iPhone & Android.`;

@@ -1,5 +1,5 @@
 import { getImages } from "@/lib/cloudinary";
-import { cldUrl, encodePublicId, humanizePublicId } from "@/lib/cldUrl";
+import { cldUrl, encodePublicId } from "@/lib/cldUrl";
 import { SITE_URL } from "@/lib/siteUrl";
 
 const escape = (s) =>
@@ -23,7 +23,7 @@ function buildSitemap(images) {
 		...images.map((img) => {
 			const loc = `${SITE_URL}/w/${encodePublicId(img.public_id)}`;
 			const imgLoc = cldUrl(img.public_id, img.format, "c_scale,w_1200");
-			const title = escape(humanizePublicId(img.public_id));
+			const title = escape(img.title);
 			return `<url><loc>${loc}</loc><image:image><image:loc>${imgLoc}</image:loc><image:title>${title}</image:title></image:image></url>`;
 		}),
 	];

@@ -5,7 +5,7 @@ import GlitchImage from "@/components/GlitchImage";
 import Seo from "@/components/Seo";
 import JsonLd from "@/components/JsonLd";
 import { getImages } from "@/lib/cloudinary";
-import { cldUrl, encodePublicId, humanizePublicId } from "@/lib/cldUrl";
+import { cldUrl, encodePublicId } from "@/lib/cldUrl";
 import { SITE_URL } from "@/lib/siteUrl";
 
 const DESCRIPTION =
@@ -36,7 +36,7 @@ export default function Home({ images = [] }) {
 				"@type": "ListItem",
 				position: i + 1,
 				url: `${SITE_URL}/w/${encodePublicId(img.public_id)}`,
-				name: humanizePublicId(img.public_id),
+				name: img.title,
 			})),
 		},
 	};
@@ -92,7 +92,7 @@ function GalleryTile({ image, index, priority }) {
 	return (
 		<Link
 			href={`/w/${encodePublicId(image.public_id)}`}
-			aria-label={`View wallpaper: ${humanizePublicId(image.public_id)}`}
+			aria-label={`View wallpaper: ${image.title}`}
 			className="group reveal mb-3 block outline-none sm:mb-4"
 			style={{ animationDelay: `${Math.min(index, 10) * 55}ms` }}
 		>
@@ -112,7 +112,7 @@ function GalleryTile({ image, index, priority }) {
 				/>
 				<span className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-between gap-2 bg-black/85 px-2.5 py-2 text-[10px] uppercase tracking-[0.25em] text-bone transition-transform duration-200 group-hover:translate-y-0 group-focus-visible:translate-y-0">
 				<span className="truncate">
-						{humanizePublicId(image.public_id)}
+						{image.title}
 					</span>
 					<span aria-hidden="true" className="text-accent">
 						↗
