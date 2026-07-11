@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { CldImage } from "next-cloudinary";
+import Image from "next/image";
 import { useGlitch } from "react-powerglitch";
 import useAmbientGlitch from "@/hooks/useAmbientGlitch";
 import { randomRange } from "@/lib/glitchSchedule.mjs";
@@ -40,7 +40,10 @@ export default function GlitchImage({
 
 	return (
 		<div ref={wrapperRef}>
-			<CldImage
+			{/* Plain next/image: src is already a full Cloudinary URL from cldUrl().
+			    With images.unoptimized it renders verbatim — CldImage would wrap the
+			    URL in a second transform and 404. */}
+			<Image
 				ref={glitch.ref}
 				src={src}
 				alt={alt}

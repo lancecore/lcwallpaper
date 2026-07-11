@@ -10,8 +10,7 @@ export default function Wallpaper({ image }) {
 	const name = humanizePublicId(image.public_id);
 	const title = `${name} — Weird Phone Wallpaper | Lancecore`;
 	const path = `/w/${encodePublicId(image.public_id)}`;
-	const orientation = image.width > image.height ? "Landscape" : "Portrait";
-	const description = `${name} — a free weird phone wallpaper. ${image.width}×${image.height} ${image.format?.toUpperCase()}, ${orientation.toLowerCase()}. Download high-res for iPhone & Android.`;
+	const description = `${name} — a free weird phone wallpaper. ${image.width}×${image.height} ${image.format?.toUpperCase()}. Download high-res for iPhone & Android.`;
 	const og = cldUrl(image.public_id, image.format, "c_scale,w_1200");
 	const ogHeight = Math.round(1200 * (image.height / image.width));
 	const download = cldUrl(image.public_id, image.format, "fl_attachment");
@@ -104,10 +103,13 @@ export default function Wallpaper({ image }) {
 					/>
 				</div>
 
-				<div className="reveal mt-6 flex items-center justify-between gap-4 border-t border-zinc-800 pt-5">
-					<span className="text-[11px] uppercase tracking-[0.3em] text-stone-400">
-						{orientation}
-					</span>
+				{image.alt && (
+					<p className="reveal mt-6 text-sm leading-relaxed text-stone-400">
+						{image.alt}
+					</p>
+				)}
+
+				<div className="reveal mt-6 flex items-center justify-center border-t border-zinc-800 pt-5">
 					<a
 						href={download}
 						download={filename}
