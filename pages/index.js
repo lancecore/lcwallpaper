@@ -1,208 +1,126 @@
 import Head from "next/head";
 import Link from "next/link";
-import cloudinary from "cloudinary";
-import { CldImage } from "next-cloudinary";
-import { useGlitch } from "react-powerglitch";
-import Logo from "@/components/Logo";
+import Hero from "@/components/Hero";
+import Footer from "@/components/Footer";
+import GlitchImage from "@/components/GlitchImage";
+import { getImages } from "@/lib/cloudinary";
+import { cldUrl, encodePublicId, humanizePublicId } from "@/lib/cldUrl";
 
 export default function Home({ images = [] }) {
-	const [mostRecentImage, ...restImages] = images;
-
-	// Click tracking function
-	const handleImageClick = (label) => {
-		if (typeof window !== "undefined" && window.gtag) {
-			window.gtag("event", "click", {
-				event_category: "Image",
-				event_label: label,
-			});
-		}
-	};
-
-	const logoGlitch = useGlitch({
-		playMode: "always",
-		createContainers: true,
-		hideOverflow: true,
-		timing: { duration: 2500 },
-		glitchTimeSpan: { start: 0.1, end: 0.25 },
-		shake: { velocity: 25, amplitudeX: 0.1, amplitudeY: 0.15 },
-		slice: {
-			count: 8,
-			velocity: 8,
-			minHeight: 0.02,
-			maxHeight: 0.2,
-			hueRotate: true,
-		},
-		pulse: false,
-	});
-
-	const hoverGlitch = useGlitch({
-		playMode: "hover",
-		createContainers: true,
-		hideOverflow: true,
-		timing: { duration: 250, iterations: 1 },
-		glitchTimeSpan: { start: 0, end: 1 },
-		shake: false,
-		slice: {
-			count: 6,
-			velocity: 15,
-			minHeight: 0.02,
-			maxHeight: 0.15,
-			hueRotate: true,
-		},
-		pulse: false,
-	});
-
-	const nameGlitch = useGlitch({
-		playMode: "hover",
-		createContainers: true,
-		hideOverflow: false,
-		timing: { duration: 250, iterations: 1 },
-		glitchTimeSpan: { start: 0, end: 1 },
-		shake: { velocity: 15, amplitudeX: 0.2, amplitudeY: 0.2 },
-		slice: {
-			count: 6,
-			velocity: 15,
-			minHeight: 0.02,
-			maxHeight: 0.15,
-			hueRotate: true,
-		},
-		pulse: false,
-	});
+	const featured = images[0];
 
 	return (
 		<>
 			<Head>
-				<title>⚡️Lancecore: Weird Wallpapers for your Phone</title>
+				<title>⚡️ Lancecore — Weird Wallpapers for your Phone</title>
+				<meta
+					property="og:title"
+					content="Weird Wallpapers for your Phone"
+				/>
+				{featured && (
+					<meta
+						property="og:image"
+						content={cldUrl(
+							featured.public_id,
+							featured.format,
+							"c_scale,w_1200"
+						)}
+					/>
+				)}
+				<meta name="twitter:card" content="summary_large_image" />
 			</Head>
-			<main className="mx-auto max-w-[1960px]">
-				<div className="columns-1 gap-4 md:columns-5">
-					<div className="after:content relative mb-5 flex h-auto flex-col items-center justify-center gap-4 overflow-hidden rounded-lg bg-zinc-900/60 px-6 py-12 text-center text-white shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight border border border-zinc-800/50">
-						<span ref={logoGlitch.ref}>
-							<Logo className="h-24 w-auto" />
-						</span>
-						<h1 className="mb-4 mt-8 text-lg font-bold uppercase tracking-widest">
-							Weird Wallpapers
-							<br />
-							for your Phone
-						</h1>
-						<p className="text-sm text-stone-400">
-							Created by{" "}
-							<a
-								href="https://lanceboer.com/"
-								target="_blank"
-								ref={nameGlitch.ref}
-								className="text-stone-300 underline decoration-stone-400 decoration-solid underline-offset-4 hover:text-stone-50 hover:decoration-wavy"
-							>
-								Lance Boer
-							</a>
-						</p>
-						<p className="text-sm text-stone-400">
-							Previously on...{" "}
-							<a
-								href="https://bastards.tumblr.com/"
-								target="_blank"
-								ref={nameGlitch.ref}
-								className="text-stone-300 underline decoration-stone-400 decoration-solid underline-offset-4 hover:text-stone-50 hover:decoration-wavy"
-							>
-								Stand Up For Bastards
-							</a>
-						</p>
-					</div>
-					{mostRecentImage && (
-						<div className="grid-area-featured mb-4">
-							<Link
-								href={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${mostRecentImage.public_id}.${mostRecentImage.format}`}
-								className="block w-full cursor-zoom-in"
-								onClick={() =>
-									handleImageClick(mostRecentImage.public_id)
-								}
-							>
-								<CldImage
-									alt={mostRecentImage.alt}
-									className="w-auto h-full rounded-lg object-cover"
-									style={{
-										transform: "translate3d(0, 0, 0)",
-									}}
-									ref={hoverGlitch.ref}
-									src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_1080/${mostRecentImage.public_id}.${mostRecentImage.format}`}
-									width={1080}
-									height={720}
-									placeholder="blur"
-									blurDataURL={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/e_blur:2000,q_1/${mostRecentImage.public_id}.${mostRecentImage.format}`}
-								/>
-							</Link>
+
+			<Hero count={images.length} />
+
+			<main id="main" className="mx-auto w-full max-w-[1800px] px-5 sm:px-8">
+				{images.length === 0 ? (
+					<EmptyState />
+				) : (
+					<>
+						<div className="reveal mb-6 flex items-center gap-4 text-[11px] uppercase tracking-[0.35em] text-stone-400">
+							<span className="h-px flex-1 bg-zinc-800" />
+							Latest signals
+							<span className="h-px flex-1 bg-zinc-800" />
 						</div>
-					)}
-					{restImages.map(({ id, public_id, format, alt }) => (
-						<div
-							key={id}
-							className="grid-area-item h-full mb-4"
-						>
-							<Link
-								href={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${public_id}.${format}`}
-								className="block w-auto cursor-zoom-in h-full"
-								onClick={() => handleImageClick(public_id)}
-							>
-								<CldImage
-									alt={alt}
-									className="w-auto h-full rounded-lg object-cover"
-									style={{
-										transform: "translate3d(0, 0, 0)",
-									}}
-									ref={hoverGlitch.ref}
-									src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_720/${public_id}.${format}`}
-									width={720}
-									height={480}
-									placeholder="blur"
-									blurDataURL={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/e_blur:2000,q_1/${public_id}.${format}`}
+						<div className="columns-2 gap-3 sm:gap-4 md:columns-3 xl:columns-4">
+							{images.map((image, i) => (
+								<GalleryTile
+									key={image.id}
+									image={image}
+									index={i}
+									priority={i === 0}
 								/>
-							</Link>
+							))}
 						</div>
-					))}
-				</div>
+					</>
+				)}
 			</main>
+
+			<Footer />
 		</>
 	);
 }
 
+function GalleryTile({ image, index, priority }) {
+	const ratio =
+		image.width && image.height ? image.height / image.width : 1.5;
+
+	return (
+		<Link
+			href={`/w/${encodePublicId(image.public_id)}`}
+			aria-label={`View wallpaper: ${humanizePublicId(image.public_id)}`}
+			className="group reveal mb-3 block outline-none sm:mb-4"
+			style={{ animationDelay: `${Math.min(index, 10) * 55}ms` }}
+		>
+			<div className="relative overflow-hidden border border-zinc-800/80 bg-zinc-950 transition-colors duration-200 group-hover:border-accent group-focus-visible:border-accent">
+				<GlitchImage
+					src={cldUrl(image.public_id, image.format, "c_scale,w_720")}
+					blurDataURL={cldUrl(
+						image.public_id,
+						image.format,
+						"e_blur:2000,q_1"
+					)}
+					alt={image.alt}
+					width={720}
+					height={Math.round(720 * ratio)}
+					className="w-full"
+					priority={priority}
+				/>
+				<span className="pointer-events-none absolute left-2 top-2 -rotate-3 border border-accent/50 bg-black/80 px-2 py-0.5 font-display text-xs tracking-wider text-bone">
+					{String(index + 1).padStart(2, "0")}
+				</span>
+				<span className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-between gap-2 bg-black/85 px-2.5 py-2 text-[10px] uppercase tracking-[0.25em] text-bone transition-transform duration-200 group-hover:translate-y-0 group-focus-visible:translate-y-0">
+				<span className="truncate">
+						{humanizePublicId(image.public_id)}
+					</span>
+					<span aria-hidden="true" className="text-accent">
+						↗
+					</span>
+				</span>
+			</div>
+		</Link>
+	);
+}
+
+function EmptyState() {
+	return (
+		<div className="reveal flex flex-col items-center gap-6 py-24 text-center">
+			<p className="font-display glitch-text text-5xl uppercase tracking-tight text-stone-500 sm:text-7xl">
+				{"// No signal"}
+			</p>
+			<div className="flex w-full max-w-md items-center gap-4">
+				<span className="h-px flex-1 bg-zinc-800" />
+				<span className="h-2 w-2 rounded-full bg-accent" />
+				<span className="h-px flex-1 bg-zinc-800" />
+			</div>
+			<p className="text-sm uppercase tracking-[0.3em] text-stone-400">
+				Transmission dropped — new signals incoming.
+			</p>
+		</div>
+	);
+}
+
 export async function getStaticProps() {
-	cloudinary.config({
-		cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-		api_key: process.env.CLOUDINARY_API_KEY,
-		api_secret: process.env.CLOUDINARY_API_SECRET,
-	});
-
-	const results = await cloudinary.v2.search
-		.expression(`folder:${process.env.CLOUDINARY_FOLDER}/*`)
-		.with_field("context")
-		.sort_by("created_at", "desc")
-		.max_results(400)
-		.execute();
-
-	console.log("Cloudinary search results:", results);
-
-	let reducedResults = [];
-	if (results.resources) {
-		let i = 0;
-		for (let result of results.resources) {
-			reducedResults.push({
-				id: i,
-				height: result.height,
-				width: result.width,
-				public_id: result.public_id,
-				format: result.format,
-				alt:
-					result.context && result.context.alt
-						? result.context.alt
-						: "Weird Wallpaper",
-			});
-			i++;
-		}
-	}
-
-	return {
-		props: {
-			images: reducedResults,
-		},
-	};
+	const images = await getImages();
+	return { props: { images } };
 }

@@ -20,6 +20,16 @@
 # production
 /build
 
+# build-time cloudinary fetch cache (regenerated each build)
+/.cloudinary-cache.json
+
+# claude-flow tooling artifacts (local caches / state DBs — not project code)
+/.claude-flow/
+/.swarm/
+/.claude/
+/.mcp.json
+/ruvector.db
+
 # misc
 .DS_Store
 *.pem

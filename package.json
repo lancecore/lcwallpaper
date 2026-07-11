@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
+		"prebuild": "rm -f .cloudinary-cache.json",
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint"

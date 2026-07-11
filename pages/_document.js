@@ -24,6 +24,8 @@ export default function Document() {
 					property="og:description"
 					content="Download some weird wallpapers for your phone"
 				/>
+				<meta property="og:type" content="website" />
+				<meta property="og:site_name" content="Lancecore" />
 			</Head>
 			<body className="antialiased">
 				<Main />
